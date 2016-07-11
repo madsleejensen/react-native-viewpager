@@ -92,6 +92,13 @@ var ViewPager = React.createClass({
     this._panResponder = PanResponder.create({
       // Claim responder if it's a horizontal pan
       onMoveShouldSetPanResponder: (e, gestureState) => {
+        /**
+         * @workaround: because the viewpager might embed a "zoomable" component using pinch zoom, they sometime conflict and resulting in zooming / panning at the same time.
+         */ 
+        if (gestureState.numberActiveTouches > 1) {
+            return false;
+        }
+
         if (Math.abs(gestureState.dx) > Math.abs(gestureState.dy)) {
           if (/* (gestureState.moveX <= this.props.edgeHitWidth ||
               gestureState.moveX >= deviceWidth - this.props.edgeHitWidth) && */
